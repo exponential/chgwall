@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import argparse         # pip install argparse
+import glob
+import os
+from PIL import Image   # pip install pillow
+import pwd
+import random
+import sys
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='Combine multiple images for into one\nfor wallpaper support.')
+  parser.add_argument('--width', type=int, required=True, help='Width to adjust image(s).')
+  parser.add_argument('--height', type=int, required=True, help='Height to adjust image(s).')
+  parser.add_argument('--displays', type=int, default=2, help='Number of displays to account for.')
+  args = parser.parse_args()
+
+  uname = pwd.getpwuid( os.getuid() ).pw_name
+
+  imgList = glob.glob("/home/" + uname + "/Pictures/*.*g")
+
+  newList = []
+  for i in range(1,args.displays+1):
+    newList.append(random.choice(imgList))
+
+  newImage = Image.new('RGB',(args.width*args.displays,args.height))
+  imgs = map(Image.open,newList)
+  offset = 0
+  for im in imgs:
+    newImage.paste(im.resize((args.width,args.height),Image.ANTIALIAS),(offset,0))
+    offset += args.width
+
+  newImage.save('/home/' + uname + '/wallpaper-combined.jpg')
+
+  os.system('gsettings set org.gnome.desktop.background picture-uri /home/' + uname + '/wallpaper-combined.jpg')
+  os.system('gsettings set org.gnome.desktop.background picture-options "wallpaper"')
