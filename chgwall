@@ -27,7 +27,7 @@ if __name__ == '__main__':
   imgs = map(Image.open,newList)
   offset = 0
   for im in imgs:
-    newImage.paste(im.resize((args.width,args.height),Image.ANTIALIAS),(offset,0))
+    newImage.paste(im.resize((args.width,args.height),Image.LANCZOS),(offset,0))
     offset += args.width
 
   newImage.save('/home/' + uname + '/wallpaper-combined.jpg')
