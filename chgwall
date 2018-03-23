@@ -17,10 +17,10 @@ if __name__ == '__main__':
 
   uname = pwd.getpwuid( os.getuid() ).pw_name
 
-  imgList = glob.glob("/home/" + uname + "/Pictures/*.*g")
+  imgList = glob.glob('/home/' + uname + '/Pictures/*.*g')
 
   newList = []
-  for i in range(1,args.displays+1):
+  for i in range(0,args.displays):
     newList.append(random.choice(imgList))
 
   newImage = Image.new('RGB',(args.width*args.displays,args.height))
