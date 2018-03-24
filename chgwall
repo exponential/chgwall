@@ -13,6 +13,7 @@ if __name__ == '__main__':
   parser.add_argument('--width', type=int, required=True, help='Width to adjust image(s).')
   parser.add_argument('--height', type=int, required=True, help='Height to adjust image(s).')
   parser.add_argument('--displays', type=int, default=2, help='Number of displays to account for.')
+  parser.add_argument('--nocolor', dest='nocolor', default=True, action='store_false', help='Changes images to black and white.')
   args = parser.parse_args()
 
   uname = pwd.getpwuid( os.getuid() ).pw_name
@@ -23,7 +24,7 @@ if __name__ == '__main__':
   for i in range(0,args.displays):
     newList.append(random.choice(imgList))
 
-  newImage = Image.new('RGB',(args.width*args.displays,args.height))
+  newImage = Image.new('RGB' if args.nocolor else 'L',(args.width*args.displays,args.height))
   imgs = map(Image.open,newList)
   offset = 0
   for im in imgs:
